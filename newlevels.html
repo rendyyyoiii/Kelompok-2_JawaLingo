@@ -52,7 +52,7 @@
       cursor: pointer;
       transition: all 0.3s ease;
       position: relative;
-      text-decoration: none;
+      text-decoration: none; /* Menghilangkan garis bawah pada tautan */
     }
 
     .level-button .level-description {
@@ -78,6 +78,7 @@
       background: linear-gradient(135deg, #ef9a9a, #e57373);
     }
 
+    /* CSS untuk tombol Daily Challenge */
     .level-button.daily-challenge {
       background: linear-gradient(135deg, rgb(143, 143, 249), rgb(91, 91, 249));
     }
@@ -148,12 +149,11 @@
       <div class="level-description">Bahasa formal dan sastra</div>
     </button>
 
-    <button class="level-button daily-challenge" href="daily_challenge.html">
+    <!-- Ganti dengan button untuk Daily Challenge -->
+    <button class="level-button daily-challenge" onclick="window.location.href='daily_challenge.html'">
       <div>Daily Challenge</div>
       <div class="level-description">Tantangan harian untuk meningkatkan kemampuan</div>
     </button>
-
-    </a>
   </div>
 
   <script>
