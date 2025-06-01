@@ -213,13 +213,11 @@
     </style>
 </head>
 <body>
-    <!-- Back Button -->
     <button class="back-button" onclick="goBackToLevelSelection()">←</button>
     
     <h1>Level Mudah</h1>
     
     <div class="level-grid">
-        <!-- Level 1 - Unlocked -->
         <div class="level-item unlocked" onclick="playLevel(1)">
             <span class="level-number">1</span>
         </div>
@@ -250,7 +248,6 @@
             </svg>
         </div>
         
-        <!-- Second row -->
         <div class="level-item" onclick="showLockedMessage(6)">
             <svg class="lock-svg" viewBox="0 0 24 24">
                 <path d="M6 10h12v10H6V10zm6-4c1.1 0 2 .9 2 2v2H10V8c0-1.1.9-2 2-2zm0-2c-2.2 0-4 1.8-4 4v2H5c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V12c0-1.1-.9-2-2-2h-1V8c0-2.2-1.8-4-4-4z"/>
@@ -288,12 +285,10 @@
     </div>
 
     <script>
-        // Data untuk tracking progress level
-        let unlockedLevels = [1]; // Level 1 terbuka secara default
+        let unlockedLevels = [1]; 
         
         function playLevel(levelNumber) {
             if (unlockedLevels.includes(levelNumber)) {
-                // Redirect ke soal.html dengan parameter level
                 window.location.href = `soal_mudah1.html?level=${levelNumber}&difficulty=mudah`;
             }
         }
@@ -303,7 +298,6 @@
         }
         
         function completeLevel(levelNumber) {
-            // Buka level berikutnya setelah menyelesaikan level saat ini
             const nextLevel = levelNumber + 1;
             if (nextLevel <= 10 && !unlockedLevels.includes(nextLevel)) {
                 unlockedLevels.push(nextLevel);
@@ -316,24 +310,21 @@
             const levelItems = document.querySelectorAll('.level-item');
             const targetLevel = levelItems[levelNumber - 1];
             
-            // Ubah tampilan level menjadi unlocked
             targetLevel.classList.add('unlocked');
             targetLevel.innerHTML = `<span class="level-number">${levelNumber}</span>`;
             targetLevel.setAttribute('onclick', `playLevel(${levelNumber})`);
             
-            // Animasi unlock
             targetLevel.style.transform = 'scale(1.1)';
             setTimeout(() => {
                 targetLevel.style.transform = 'scale(1)';
             }, 300);
         }
 
-        // Function untuk kembali ke halaman pemilihan level
+
         function goBackToLevelSelection() {
             window.location.href = 'newlevels.html';
         }
         
-        // Efek hover yang lebih interaktif
         document.querySelectorAll('.level-item').forEach(item => {
             item.addEventListener('mouseenter', function() {
                 if (this.classList.contains('unlocked')) {
@@ -346,7 +337,7 @@
             });
         });
 
-        // Fungsi untuk menyimpan dan memuat progress (opsional)
+
         function saveProgress() {
             localStorage.setItem('unlockedLevels_mudah', JSON.stringify(unlockedLevels));
         }
@@ -355,7 +346,6 @@
             const saved = localStorage.getItem('unlockedLevels_mudah');
             if (saved) {
                 unlockedLevels = JSON.parse(saved);
-                // Update tampilan level yang sudah terbuka
                 unlockedLevels.forEach(levelNumber => {
                     if (levelNumber > 1) {
                         unlockLevelVisually(levelNumber);
@@ -364,7 +354,6 @@
             }
         }
 
-        // Load progress saat halaman dimuat
         window.addEventListener('load', loadProgress);
     </script>
 </body>

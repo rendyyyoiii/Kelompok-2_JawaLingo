@@ -291,7 +291,6 @@
     </div>
 
     <script>
-        // Data untuk tracking progress level
         let unlockedLevels = [1]; // Level 1 terbuka secara default
         
         function playLevel(levelNumber) {
@@ -319,24 +318,24 @@
             const levelItems = document.querySelectorAll('.level-item');
             const targetLevel = levelItems[levelNumber - 1];
             
-            // Ubah tampilan level menjadi unlocked
+
             targetLevel.classList.add('unlocked');
             targetLevel.innerHTML = `<span class="level-number">${levelNumber}</span>`;
             targetLevel.setAttribute('onclick', `playLevel(${levelNumber})`);
             
-            // Animasi unlock
+
             targetLevel.style.transform = 'scale(1.1)';
             setTimeout(() => {
                 targetLevel.style.transform = 'scale(1)';
             }, 300);
         }
 
-        // Function untuk kembali ke halaman pemilihan level
+
         function goBackToLevelSelection() {
             window.location.href = 'newlevels.html';
         }
         
-        // Efek hover yang lebih interaktif
+
         document.querySelectorAll('.level-item').forEach(item => {
             item.addEventListener('mouseenter', function() {
                 if (this.classList.contains('unlocked')) {
@@ -349,7 +348,7 @@
             });
         });
 
-        // Fungsi untuk menyimpan dan memuat progress (opsional)
+
         function saveProgress() {
             localStorage.setItem('unlockedLevels_mudah', JSON.stringify(unlockedLevels));
         }
@@ -358,7 +357,7 @@
             const saved = localStorage.getItem('unlockedLevels_mudah');
             if (saved) {
                 unlockedLevels = JSON.parse(saved);
-                // Update tampilan level yang sudah terbuka
+
                 unlockedLevels.forEach(levelNumber => {
                     if (levelNumber > 1) {
                         unlockLevelVisually(levelNumber);
@@ -367,7 +366,6 @@
             }
         }
 
-        // Load progress saat halaman dimuat
         window.addEventListener('load', loadProgress);
     </script>
 </body>
