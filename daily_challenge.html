@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JawaLingo - Daily Challenge</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .game-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(76, 175, 80, 0.2);
+            backdrop-filter: blur(8px);
+            text-align: center;
+            max-width: 900px;
+            width: 100%;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .header {
+            margin-bottom: 30px;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .subtitle {
+            color: #43a047;
+            font-size: 1.1em;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .challenge-info {
+            background: rgba(232, 245, 233, 0.8);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #43a047;
+            color: #2e7d32;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            background: linear-gradient(135deg, #43a047, #388e3c);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 15px;
+            margin: 5px;
+            font-weight: bold;
+            font-size: 1.1em;
+            box-shadow: 0 5px 15px rgba(67, 160, 71, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-item:hover {
+            transform: translateY(-3px);
+        }
+
+        .progress-bar {
+            background: #c8e6c9;
+            border-radius: 15px;
+            height: 25px;
+            margin: 15px 0;
+            overflow: hidden;
+            box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .progress-fill {
+            background: linear-gradient(135deg, #43a047, #2e7d32);
+            height: 100%;
+            border-radius: 15px;
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+
+        .game-area {
+            display: flex;
+            justify-content: space-between;
+            gap: 30px;
+            margin: 30px 0;
+            min-height: 400px;
+        }
+
+        .words-column, .meanings-column {
+            flex: 1;
+            background: rgba(241, 248, 233, 0.9);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.1);
+            border: 2px solid #c8e6c9;
+        }
+
+        .column-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #2e7d32;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 3px solid #43a047;
+        }
+
+        .word-item, .meaning-item {
+            background: linear-gradient(135deg, #43a047, #388e3c);
+            color: white;
+            padding: 15px 20px;
+            margin: 10px 0;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            font-size: 1.1em;
+            position: relative;
+            box-shadow: 0 5px 15px rgba(67, 160, 71, 0.3);
+            border: 2px solid transparent;
+        }
+
+        .word-item:hover, .meaning-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(67, 160, 71, 0.4);
+        }
+
+        .word-item.selected {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+            animation: pulse 1s infinite;
+            border-color: #fff3e0;
+        }
+
+        .word-item.matched, .meaning-item.matched {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+            cursor: default;
+            transform: none;
+            border-color: #e8f5e9;
+        }
+
+        .word-item.matched:hover, .meaning-item.matched:hover {
+            transform: none;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            background: linear-gradient(135deg, #43a047, #388e3c);
+            color: white;
+            border: none;
+            padding: 18px 25px;
+            border-radius: 15px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(67, 160, 71, 0.3);
+        }
+
+        button:hover {
+            background: linear-gradient(135deg, #388e3c, #2e7d32);
+            transform: translateY(-2px);
+            box-shadow: 0 7px 20px rgba(67, 160, 71, 0.4);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .new-challenge {
+            background: linear-gradient(135deg, #2e7d32, #1b5e20);
+        }
+
+        .reset-btn {
+            background: linear-gradient(135deg, #ff5722, #d84315);
+        }
+
+        .hint-btn {
+            background: linear-gradient(135deg, #ff9800, #f57c00);
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 1.2em;
+            font-weight: bold;
+            min-height: 30px;
+            transition: all 0.5s ease;
+            color: #2e7d32;
+        }
+
+        .success {
+            color: #2e7d32;
+            animation: bounce 0.6s ease-in-out;
+        }
+
+        .error {
+            color: #d32f2f;
+            animation: shake 0.5s ease-in-out;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.9);
+            color: #2e7d32;
+            border: 2px solid #43a047;
+            padding: 10px 20px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #43a047;
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes bounce {
+            0%, 20%, 60%, 100% { transform: translateY(0); }
+            40% { transform: translateY(-10px); }
+            80% { transform: translateY(-5px); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        @media (max-width: 768px) {
+            .game-area {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            .game-container {
+                padding: 20px;
+                margin: 10px;
+            }
+            
+            .logo {
+                font-size: 2em;
+            }
+            
+            .stats {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .stat-item {
+                width: 80%;
+            }
+
+            .back-btn {
+                position: relative;
+                top: auto;
+                left: auto;
+                margin-bottom: 20px;
+                display: inline-block;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .game-container {
+                padding: 20px 15px;
+            }
+            
+            .logo {
+                font-size: 1.8em;
+            }
+            
+            button {
+                padding: 15px 20px;
+                font-size: 0.9em;
+            }
+            
+            .word-item, .meaning-item {
+                padding: 12px 15px;
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <a href="newlevels.html" class="back-btn">← Kembali</a>
+    
+    <div class="game-container">
+        <div class="header">
+            <h1 class="logo">JawaLingo</h1>
+            <p class="subtitle">🔗 Daily Challenge: Connect the Words</p>
+        </div>
+        
+        <div class="challenge-info">
+            <strong>Tantangan Hari Ini:</strong> <span id="challengeDate"></span><br>
+            <span id="challengeDesc">Cocokkan setiap kata dengan arti yang tepat untuk melatih kosakata!</span>
+        </div>
+
+        <div class="stats">
+            <div class="stat-item">
+                ⏰ Waktu: <span id="timer">00:00</span>
+            </div>
+            <div class="stat-item">
+                ✅ Cocok: <span id="matched">0</span>/<span id="totalPairs">8</span>
+            </div>
+            <div class="stat-item">
+                🏆 Skor: <span id="score">0</span>
+            </div>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 0%">0%</div>
+        </div>
+
+        <div class="game-area">
+            <div class="words-column">
+                <div class="column-title">📚 KATA</div>
+                <div id="wordsContainer"></div>
+            </div>
+            
+            <div class="meanings-column">
+                <div class="column-title">💡 ARTI</div>
+                <div id="meaningsContainer"></div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="newChallenge()" class="new-challenge">🎲 Tantangan Baru</button>
+            <button onclick="resetGame()" class="reset-btn">🔄 Reset</button>
+            <button onclick="showHint()" class="hint-btn">💡 Petunjuk</button>
+        </div>
+
+        <div id="message" class="message"></div>
+    </div>
+
+    <script>
+        class WordConnectGame {
+            constructor() {
+                this.wordPairs = [];
+                this.selectedWord = null;
+                this.matchedPairs = [];
+                this.gameStarted = false;
+                this.startTime = null;
+                this.timer = null;
+                this.score = 0;
+                this.hintCount = 0;
+                
+                this.setupGame();
+                this.updateChallengeDate();
+            }
+
+            updateChallengeDate() {
+                const today = new Date();
+                const options = { 
+                    weekday: 'long', 
+                    year: 'numeric', 
+                    month: 'long', 
+                    day: 'numeric' 
+                };
+                document.getElementById('challengeDate').textContent = 
+                    today.toLocaleDateString('id-ID', options);
+            }
+
+            setupGame() {
+                this.generateWordPairs();
+                this.renderGame();
+                this.updateStats();
+                this.setMessage("Pilih kata di sebelah kiri, lalu pilih artinya di sebelah kanan!");
+            }
+
+            generateWordPairs() {
+                const allPairs = [
+                    // Bahasa Jawa - Indonesia
+                    {word: "Menawi", meaning: "Jikalau", category: "Bahasa Jawa"},
+                    {word: "Mangke", meaning: "Nanti", category: "Bahasa Jawa"},
+                    {word: "Ngunjuk", meaning: "Minum", category: "Bahasa Jawa"},
+                    {word: "Siram", meaning: "Mandi", category: "Bahasa Jawa"},
+                    {word: "Dhahar", meaning: "Makan", category: "Bahasa Jawa"},
+                    {word: "Nitih", meaning: "Naik", category: "Bahasa Jawa"},
+                    {word: "Sare", meaning: "Tidur", category: "Bahasa Jawa"},
+                    {word: "Tumbas", meaning: "Beli", category: "Bahasa Jawa"},
+                    
+                    {word: "Ngamuk", meaning: "Marah", category: "Bahasa Jawa"},
+                    {word: "Mesem", meaning: "Tersenyum", category: "Bahasa Jawa"},
+                    {word: "Ngguyu", meaning: "Tertawa", category: "Bahasa Jawa"},
+                    {word: "Ndugal", meaning: "Nakal", category: "Bahasa Jawa"},
+                    {word: "Ngising", meaning: "Buang Air Besar", category: "Bahasa Jawa"},
+                    {word: "Gendeng", meaning: "Gila", category: "Bahasa Jawa"},
+                    {word: "Nggateli", meaning: "Menyebalkan", category: "Bahasa Jawa"},
+                    {word: "Tuku", meaning: "Beli", category: "Bahasa Jawa"},
+                    
+                    {word: "Omah", meaning: "Rumah", category: "Bahasa Jawa"},
+                    {word: "Banyu", meaning: "Air", category: "Bahasa Jawa"},
+                    {word: "Sega", meaning: "Nasi", category: "Bahasa Jawa"},
+                    {word: "Mlaku", meaning: "Jalan", category: "Bahasa Jawa"},
+                    {word: "Turu", meaning: "Tidur", category: "Bahasa Jawa"},
+                    {word: "Mangan", meaning: "Makan", category: "Bahasa Jawa"},
+                    {word: "Sinau", meaning: "Belajar", category: "Bahasa Jawa"},
+                    {word: "Dolanan", meaning: "Bermain", category: "Bahasa Jawa"},
+                    
+                    {word: "Wedi", meaning: "Takut", category: "Bahasa Jawa"},
+                    {word: "Wedian", meaning: "Penakut", category: "Bahasa Jawa"},
+                    {word: "Wani", meaning: "Berani", category: "Bahasa Jawa"},
+                    {word: "Piro", meaning: "Berapa", category: "Bahasa Jawa"},
+                    {word: "Adus", meaning: "Mandi", category: "Bahasa Jawa"},
+                    {word: "Mlayu", meaning: "Berlari", category: "Bahasa Jawa"},
+                    {word: "Ojok", meaning: "Jangan", category: "Bahasa Jawa"},
+                    {word: "Marai", meaning: "Ngajarin", category: "Bahasa Jawa"}
+                ];
+
+                // Randomly select 8 pairs
+                const shuffled = allPairs.sort(() => 0.5 - Math.random());
+                this.wordPairs = shuffled.slice(0, 8);
+                
+                document.getElementById('totalPairs').textContent = this.wordPairs.length;
+            }
+
+            renderGame() {
+                const wordsContainer = document.getElementById('wordsContainer');
+                const meaningsContainer = document.getElementById('meaningsContainer');
+                
+                wordsContainer.innerHTML = '';
+                meaningsContainer.innerHTML = '';
+                
+                // Shuffle the arrays independently
+                const shuffledWords = [...this.wordPairs].sort(() => 0.5 - Math.random());
+                const shuffledMeanings = [...this.wordPairs].sort(() => 0.5 - Math.random());
+                
+                // Render words
+                shuffledWords.forEach((pair, index) => {
+                    const wordEl = document.createElement('div');
+                    wordEl.className = 'word-item';
+                    wordEl.textContent = pair.word;
+                    wordEl.dataset.id = this.wordPairs.indexOf(pair);
+                    wordEl.addEventListener('click', () => this.selectWord(wordEl, pair));
+                    wordsContainer.appendChild(wordEl);
+                });
+                
+                // Render meanings
+                shuffledMeanings.forEach((pair, index) => {
+                    const meaningEl = document.createElement('div');
+                    meaningEl.className = 'meaning-item';
+                    meaningEl.textContent = pair.meaning;
+                    meaningEl.dataset.id = this.wordPairs.indexOf(pair);
+                    meaningEl.addEventListener('click', () => this.selectMeaning(meaningEl, pair));
+                    meaningsContainer.appendChild(meaningEl);
+                });
+            }
+
+            selectWord(element, pair) {
+                if (element.classList.contains('matched')) return;
+                
+                if (!this.gameStarted) {
+                    this.startGame();
+                }
+                
+                // Remove previous selection
+                document.querySelectorAll('.word-item.selected').forEach(el => {
+                    el.classList.remove('selected');
+                });
+                
+                element.classList.add('selected');
+                this.selectedWord = {element, pair};
+                this.setMessage(`Kata "${pair.word}" dipilih. Sekarang pilih artinya!`);
+            }
+
+            selectMeaning(element, pair) {
+                if (element.classList.contains('matched')) return;
+                
+                if (!this.selectedWord) {
+                    this.setMessage("Pilih kata terlebih dahulu!", 'error');
+                    return;
+                }
+                
+                if (this.selectedWord.pair === pair) {
+                    // Correct match!
+                    this.selectedWord.element.classList.add('matched');
+                    this.selectedWord.element.classList.remove('selected');
+                    element.classList.add('matched');
+                    
+                    this.matchedPairs.push(pair);
+                    this.score += 100;
+                    
+                    this.setMessage(`✅ Tepat! "${pair.word}" berarti "${pair.meaning}"`, 'success');
+                    
+                    if (this.matchedPairs.length === this.wordPairs.length) {
+                        this.completeGame();
+                    }
+                } else {
+                    // Wrong match
+                    this.setMessage(`❌ Kurang tepat! "${this.selectedWord.pair.word}" bukan "${pair.meaning}"`, 'error');
+                    this.score = Math.max(0, this.score - 20);
+                    
+                    // Remove selection
+                    this.selectedWord.element.classList.remove('selected');
+                }
+                
+                this.selectedWord = null;
+                this.updateStats();
+                this.updateProgress();
+            }
+
+            startGame() {
+                this.gameStarted = true;
+                this.startTime = Date.now();
+                this.timer = setInterval(() => {
+                    const elapsed = Math.floor((Date.now() - this.startTime) / 1000);
+                    const minutes = Math.floor(elapsed / 60);
+                    const seconds = elapsed % 60;
+                    document.getElementById('timer').textContent = 
+                        `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+
+            completeGame() {
+                clearInterval(this.timer);
+                const timeElapsed = Math.floor((Date.now() - this.startTime) / 1000);
+                const timeBonus = Math.max(0, 500 - timeElapsed * 2);
+                const hintPenalty = this.hintCount * 50;
+                
+                this.score += timeBonus;
+                this.score = Math.max(0, this.score - hintPenalty);
+                
+                this.setMessage(`🎉 Selamat! Semua kata berhasil dicocokkan! Bonus waktu: ${timeBonus} poin`, 'success');
+                this.updateStats();
+            }
+
+            updateStats() {
+                document.getElementById('matched').textContent = this.matchedPairs.length;
+                document.getElementById('score').textContent = this.score;
+            }
+
+            updateProgress() {
+                const progress = (this.matchedPairs.length / this.wordPairs.length) * 100;
+                const progressFill = document.getElementById('progressFill');
+                progressFill.style.width = `${progress}%`;
+                progressFill.textContent = `${Math.round(progress)}%`;
+            }
+
+            setMessage(text, type = '') {
+                const messageEl = document.getElementById('message');
+                messageEl.textContent = text;
+                messageEl.className = `message ${type}`;
+            }
+
+            newChallenge() {
+                this.resetGame();
+                this.generateWordPairs();
+                this.renderGame();
+                this.setMessage("Tantangan baru dimuat! Mari cocokkan kata dengan artinya!");
+            }
+
+            resetGame() {
+                clearInterval(this.timer);
+                this.selectedWord = null;
+                this.matchedPairs = [];
+                this.gameStarted = false;
+                this.startTime = null;
+                this.score = 0;
+                this.hintCount = 0;
+                
+                document.getElementById('timer').textContent = '00:00';
+                document.querySelectorAll('.word-item, .meaning-item').forEach(el => {
+                    el.classList.remove('matched', 'selected');
+                });
+                
+                this.updateStats();
+                this.updateProgress();
+                this.setMessage("Permainan direset! Pilih kata dan cocokkan dengan artinya!");
+            }
+
+            showHint() {
+                if (this.matchedPairs.length === this.wordPairs.length) {
+                    this.setMessage("Semua kata sudah dicocokkan dengan benar!");
+                    return;
+                }
+                
+                this.hintCount++;
+                this.score = Math.max(0, this.score - 30);
+                
+                // Find first unmatched pair
+                const unmatchedPair = this.wordPairs.find(pair => 
+                    !this.matchedPairs.includes(pair)
+                );
+                
+                if (unmatchedPair) {
+                    // Highlight the pair
+                    const wordEl = document.querySelector(`[data-id="${this.wordPairs.indexOf(unmatchedPair)}"].word-item`);
+                    const meaningEl = document.querySelector(`[data-id="${this.wordPairs.indexOf(unmatchedPair)}"].meaning-item`);
+                    
+                    if (wordEl && meaningEl) {
+                        wordEl.style.animation = 'pulse 2s ease-in-out 3';
+                        meaningEl.style.animation = 'pulse 2s ease-in-out 3';
+                        
+                        setTimeout(() => {
+                            wordEl.style.animation = '';
+                            meaningEl.style.animation = '';
+                        }, 6000);
+                        
+                        this.setMessage(`💡 Petunjuk: "${unmatchedPair.word}" cocok dengan "${unmatchedPair.meaning}" (-30 poin)`);
+                    }
+                }
+                
+                this.updateStats();
+            }
+        }
+
+        let game;
+
+        function initGame() {
+            game = new WordConnectGame();
+        }
+
+        function newChallenge() {
+            game.newChallenge();
+        }
+
+        function resetGame() {
+            game.resetGame();
+        }
+
+        function showHint() {
+            game.showHint();
+        }
+
+        // Initialize game when page loads
+        window.addEventListener('load', initGame);
+    </script>
+</body>
+</html>

@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JawaLingo - Profile</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f8f9fa;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background-color: white;
+            border-radius: 20px;
+            padding: 60px 50px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 3rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 50px;
+            letter-spacing: -1px;
+        }
+
+        .profile-section {
+            margin-bottom: 40px;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #28a745, #20c997);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 30px;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 25px rgba(40, 167, 69, 0.3);
+        }
+
+        .profile-avatar::before {
+            content: "👤";
+            font-size: 40px;
+            color: white;
+        }
+
+        .avatar-upload {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 30px;
+            height: 30px;
+            background-color: #28a745;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .avatar-upload:hover {
+            background-color: #218838;
+            transform: scale(1.1);
+        }
+
+        .avatar-upload::before {
+            content: "📷";
+            font-size: 14px;
+        }
+
+        .info-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .info-label {
+            display: block;
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .info-display {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e9ecef;
+            border-radius: 15px;
+            font-size: 1rem;
+            color: #495057;
+            background-color: #f8f9fa;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            cursor: pointer;
+            color: #6c757d;
+            font-size: 1.2rem;
+            user-select: none;
+            transition: color 0.3s ease;
+        }
+
+        .password-toggle:hover {
+            color: #28a745;
+        }
+
+        .back-link {
+            color: #6c757d;
+            text-decoration: none;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: #28a745;
+        }
+
+        /* Responsif untuk layar kecil */
+        @media (max-width: 600px) {
+            .container {
+                padding: 40px 30px;
+                margin: 20px;
+            }
+            
+            .title {
+                font-size: 2.5rem;
+                margin-bottom: 40px;
+            }
+        }
+
+        /* Animasi masuk */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .container {
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .info-group {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out forwards;
+        }
+
+        .info-group:nth-child(1) { animation-delay: 0.1s; }
+        .info-group:nth-child(2) { animation-delay: 0.2s; }
+        .info-group:nth-child(3) { animation-delay: 0.3s; }
+
+        .success-message {
+            background-color: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">Profile</h1>
+        
+        <div class="profile-section">
+            <div class="profile-avatar" onclick="changeAvatar()">
+                <div class="avatar-upload"></div>
+            </div>
+        </div>
+
+        <div class="success-message" id="successMessage">
+            Profile berhasil diperbarui!
+        </div>
+
+        <div class="profile-info">
+            <div class="info-group">
+                <label class="info-label">Nama</label>
+                <div class="info-display" id="namaDisplay">John Doe</div>
+            </div>
+
+            <div class="info-group">
+                <label class="info-label">Email</label>
+                <div class="info-display" id="emailDisplay">john.doe@example.com</div>
+            </div>
+
+            <div class="info-group">
+                <label class="info-label">Password</label>
+                <div class="info-display" id="passwordDisplay">
+                    <span id="passwordText">••••••••</span>
+                    <span class="password-toggle" onclick="togglePassword()">👁️</span>
+                </div>
+            </div>
+        </div>
+
+        <a href="#" class="back-link" onclick="goBack()">← Kembali ke dashboard</a>
+    </div>
+
+    <script>
+        // Simulasi data user dari login
+        const userData = {
+            nama: 'John Doe',
+            email: 'john.doe@example.com',
+            password: 'mypassword123' // Password yang diinputkan user saat login
+        };
+
+        let passwordVisible = false;
+
+        // Load user data saat halaman dimuat
+        function loadUserData() {
+            document.getElementById('namaDisplay').textContent = userData.nama;
+            document.getElementById('emailDisplay').textContent = userData.email;
+            // Password akan dimuat dengan dots secara default
+        }
+
+        function changeAvatar() {
+            // Simulasi upload avatar
+            const avatars = ['👤', '👨', '👩', '🧑', '👦', '👧'];
+            const randomAvatar = avatars[Math.floor(Math.random() * avatars.length)];
+            
+            // Update avatar dengan animasi
+            const avatarElement = document.querySelector('.profile-avatar');
+            avatarElement.style.transform = 'scale(0.9)';
+            
+            setTimeout(() => {
+                avatarElement.style.background = `linear-gradient(135deg, #${Math.floor(Math.random()*16777215).toString(16)}, #28a745)`;
+                avatarElement.style.transform = 'scale(1)';
+            }, 150);
+        }
+
+        function togglePassword() {
+            const passwordText = document.getElementById('passwordText');
+            const toggleIcon = document.querySelector('.password-toggle');
+            
+            if (passwordVisible) {
+                // Hide password
+                passwordText.textContent = '•'.repeat(userData.password.length);
+                toggleIcon.textContent = '👁️';
+                passwordVisible = false;
+            } else {
+                // Show password
+                passwordText.textContent = userData.password;
+                toggleIcon.textContent = '🙈';
+                passwordVisible = true;
+            }
+        }
+
+        function goBack() {
+            // Navigasi kembali ke dashboard atau halaman sebelumnya
+            window.history.back();
+        }
+
+        // Load data saat halaman dimuat
+        window.addEventListener('DOMContentLoaded', loadUserData);
+    </script>
+</body>
+</html>

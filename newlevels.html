@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>JawaLingo - Pilih Level</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.9);
+      padding: 50px 40px;
+      border-radius: 20px;
+      box-shadow: 0 10px 30px rgba(76, 175, 80, 0.2);
+      text-align: center;
+      max-width: 400px;
+      width: 100%;
+      backdrop-filter: blur(8px);
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .logo {
+      font-size: 3.2rem;
+      font-weight: bold;
+      color: #2e7d32;
+      margin-bottom: 40px;
+    }
+
+    .level-button {
+      width: 100%;
+      padding: 20px;
+      border: none;
+      border-radius: 15px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #fff;
+      margin-bottom: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .level-button .level-description {
+      font-size: 0.9rem;
+      opacity: 0.85;
+      font-weight: normal;
+    }
+
+    .level-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .level-button.mudah {
+      background: linear-gradient(135deg, #a5d6a7, #81c784);
+    }
+
+    .level-button.sedang {
+      background: linear-gradient(135deg, #fff59d, #ffd54f);
+    }
+
+    .level-button.sulit {
+      background: linear-gradient(135deg, #ef9a9a, #e57373);
+    }
+
+    .back-button {
+      position: absolute;
+      top: 25px;
+      left: 25px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      color: #4a4a4a;
+      cursor: pointer;
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      z-index: 10;
+    }
+
+    .back-button:hover {
+      background-color: #f1f8e9;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 500px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      .logo {
+        font-size: 2.4rem;
+      }
+
+      .level-button {
+        font-size: 1rem;
+        padding: 18px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <button class="back-button" onclick="goBack()">←</button>
+
+  <div class="container">
+    <h1 class="logo">Pilih Level</h1>
+
+    <button class="level-button mudah" onclick="selectLevel('mudah')">
+      <div>Mudah</div>
+      <div class="level-description">Kata-kata dasar sehari-hari</div>
+    </button>
+
+    <button class="level-button sedang" onclick="selectLevel('sedang')">
+      <div>Sedang</div>
+      <div class="level-description">Kosakata menengah</div>
+    </button>
+
+    <button class="level-button sulit" onclick="selectLevel('sulit')">
+      <div>Sulit</div>
+      <div class="level-description">Bahasa formal dan sastra</div>
+    </button>
+  </div>
+
+  <script>
+    function selectLevel(level) {
+      const levelNames = {
+        'mudah': 'MUDAH',
+        'sedang': 'SEDANG',
+        'sulit': 'SULIT'
+      };
+
+      alert(`Level ${levelNames[level]} dipilih!`);
+      window.location.href = `chapter_${level}.html`;
+    }
+
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+</body>
+</html>
